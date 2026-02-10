@@ -1,70 +1,60 @@
-# University Qualifier REST API
+# REST API
 
-A simple REST API built with Node.js and Express for the university qualifier assignment.
+<!-- **Date:** 10 Feb 2026  
+**Student:** Ritesh  
+**Email:** ritesh1428.be23@chitkarauniversity.edu.in
 
-## Features
+--- -->
 
-- **POST /bfhl** - Performs various operations:
-  - `fibonacci` - Generate Fibonacci series
-  - `prime` - Filter prime numbers from an array
-  - `lcm` - Calculate Least Common Multiple
-  - `hcf` - Calculate Highest Common Factor (GCD)
-  - `AI` - Get single-word answers using Google Gemini
+## Overview
 
-- **GET /health** - Health check endpoint
+This project implements two REST APIs as per the qualifier requirements:
+- `POST /bfhl` - Performs mathematical operations and AI queries
+- `GET /health` - Health check endpoint
 
-## Setup Instructions
+**Tech Stack:** Node.js + Express.js
 
-### 1. Clone or Download the Project
+---
+## Links
 
-```bash
-cd university-qualifier-api
+- **GitHub Repository:** https://github.com/cybergeek-007/qualifier-api
+- **Deployed API:** 
+- **/health https://qualifier-api-ds5a.onrender.com/health**
+- **/bfhl https://qualifier-api-ds5a.onrender.com/bfhl**
+## API Endpoints
+
+
+### 1. POST /bfhl
+
+Performs one of these operations (exactly one key per request):
+
+| Key | Input | Output |
+|-----|-------|--------|
+| `fibonacci` | Integer | Fibonacci series array |
+| `prime` | Integer array | Prime numbers array |
+| `lcm` | Integer array | LCM value |
+| `hcf` | Integer array | HCF/GCD value |
+| `AI` | Question string | Single-word AI response |
+
+**Success Response Format:**
+```json
+{
+  "is_success": true,
+  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
+  "data": ...
+}
 ```
 
-### 2. Install Dependencies
-
-```bash
-npm install
+**Error Response Format:**
+```json
+{
+  "is_success": false,
+  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
+  "error": "..."
+}
 ```
 
-### 3. Configure Environment Variables
-
-```bash
-# Copy the example file
-cp .env.example .env
-
-# Edit .env and add your Gemini API key
-```
-
-### 4. Get Your Free Gemini API Key
-
-1. Go to [Google AI Studio](https://aistudio.google.com)
-2. Sign in with your Google account
-3. Click on **"Get API Key"** button
-4. Copy the generated key
-5. Paste it in your `.env` file:
-   ```
-   GEMINI_API_KEY=your_actual_api_key_here
-   ```
-
-### 5. Run Locally
-
-```bash
-# Production mode
-npm start
-
-# Development mode (with auto-restart)
-npm run dev
-```
-
-The server will start on `http://localhost:3000`
-
-## API Usage Examples
-
-### Health Check
-```bash
-curl http://localhost:3000/health
-```
+### 2. GET /health
 
 **Response:**
 ```json
@@ -74,177 +64,116 @@ curl http://localhost:3000/health
 }
 ```
 
+---
+
+## Example Requests
+
 ### Fibonacci
 ```bash
-curl -X POST http://localhost:3000/bfhl \
+curl -X POST https://your-api.com/bfhl \
   -H "Content-Type: application/json" \
   -d '{"fibonacci": 7}'
 ```
-
-**Response:**
-```json
-{
-  "is_success": true,
-  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
-  "data": [0, 1, 1, 2, 3, 5, 8]
-}
-```
+**Response:** `[0, 1, 1, 2, 3, 5, 8]`
 
 ### Prime Filter
 ```bash
-curl -X POST http://localhost:3000/bfhl \
+curl -X POST https://your-api.com/bfhl \
   -H "Content-Type: application/json" \
   -d '{"prime": [2, 4, 7, 9, 11]}'
 ```
+**Response:** `[2, 7, 11]`
 
-**Response:**
-```json
-{
-  "is_success": true,
-  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
-  "data": [2, 7, 11]
-}
-```
-
-### LCM Calculation
+### LCM
 ```bash
-curl -X POST http://localhost:3000/bfhl \
+curl -X POST https://your-api.com/bfhl \
   -H "Content-Type: application/json" \
   -d '{"lcm": [12, 18, 24]}'
 ```
+**Response:** `72`
 
-**Response:**
-```json
-{
-  "is_success": true,
-  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
-  "data": 72
-}
-```
-
-### HCF Calculation
+### HCF
 ```bash
-curl -X POST http://localhost:3000/bfhl \
+curl -X POST https://your-api.com/bfhl \
   -H "Content-Type: application/json" \
   -d '{"hcf": [24, 36, 60]}'
 ```
+**Response:** `12`
 
-**Response:**
-```json
-{
-  "is_success": true,
-  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
-  "data": 12
-}
-```
-
-### AI Question
+### AI Query
 ```bash
-curl -X POST http://localhost:3000/bfhl \
+curl -X POST https://your-api.com/bfhl \
   -H "Content-Type: application/json" \
   -d '{"AI": "What is the capital city of Maharashtra?"}'
 ```
+**Response:** `"Mumbai"`
 
-**Response:**
-```json
-{
-  "is_success": true,
-  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
-  "data": "Mumbai"
-}
+---
+
+## Local Setup
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Create .env file
+cp .env.example .env
+
+# 3. Add your Groq API key to .env
+# Get free key from: https://console.groq.com
+
+# 4. Start server
+npm start
 ```
 
-## Deployment
+Server runs at `http://localhost:3000`
 
-### Deploy on Vercel
+---
 
-1. **Install Vercel CLI** (if not already installed):
-   ```bash
-   npm i -g vercel
-   ```
+## Getting Groq API Key (Free)
 
-2. **Login to Vercel**:
-   ```bash
-   vercel login
-   ```
+1. Visit https://console.groq.com
+2. Sign up for free account
+3. Go to API Keys section
+4. Create new API key
+5. Copy and add to `.env` file
 
-3. **Deploy**:
-   ```bash
-   vercel
-   ```
+---
 
-4. **Add Environment Variable**:
-   - Go to your Vercel dashboard
-   - Select your project
-   - Go to Settings → Environment Variables
-   - Add `GEMINI_API_KEY` with your API key
-   - Redeploy: `vercel --prod`
+## Deployment on Render
 
-### Deploy on Railway
+1. Push code to **public** GitHub repository
+2. Go to https://render.com
+3. Click **New +** → **Web Service**
+4. Connect your GitHub repo
+5. Configure:
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+6. Add Environment Variable: `GROQ_API_KEY`
+7. Click **Create Web Service**
+8. Copy the deployed URL
 
-1. **Install Railway CLI**:
-   ```bash
-   npm i -g @railway/cli
-   ```
+---
 
-2. **Login and Deploy**:
-   ```bash
-   railway login
-   railway init
-   railway up
-   ```
+## Project Structure
 
-3. **Add Environment Variable**:
-   ```bash
-   railway variables set GEMINI_API_KEY=your_api_key
-   ```
-
-### Deploy on Render
-
-1. Go to [Render](https://render.com) and sign up
-2. Click **"New +"** → **"Web Service"**
-3. Connect your GitHub repo or upload files
-4. Configure:
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-5. Add environment variable `GEMINI_API_KEY`
-6. Click **"Create Web Service"**
-
-## Error Responses
-
-The API returns proper error responses with HTTP status codes:
-
-**Invalid Input (400):**
-```json
-{
-  "is_success": false,
-  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
-  "error": "fibonacci value must be a non-negative integer"
-}
+```
+├── server.js          # Main API code
+├── package.json       # Dependencies
+├── .env.example       # Environment template
+└── README.md          # This file
 ```
 
-**Server Error (500):**
-```json
-{
-  "is_success": false,
-  "official_email": "ritesh1428.be23@chitkarauniversity.edu.in",
-  "error": "Internal server error"
-}
-```
+---
 
-## Validation Rules
+## Validation & Error Handling
 
-- **fibonacci**: Must be a non-negative integer
-- **prime**: Must be a non-empty array of integers
-- **lcm**: Must be an array of at least 2 positive integers
-- **hcf**: Must be an array of at least 2 positive integers
-- **AI**: Must be a non-empty string
+- Exactly one key required per request
+- Proper HTTP status codes (200, 400, 500)
+- Input validation for all operations
+- No crashes - graceful error handling
+- API key stored securely in environment variables
 
-## Requirements
+---
 
-- Node.js 18 or higher
-- Google Gemini API key (free tier)
 
-## License
-
-MIT
