@@ -2,15 +2,16 @@
  * University Qualifier Assignment - REST API
  * Simple Express server with POST /bfhl and GET /health endpoints
  * 
- * To get your free Gemini API key:
- * 1. Visit https://aistudio.google.com
- * 2. Sign in with your Google account
- * 3. Click "Get API Key" button
- * 4. Copy the key and paste it in your .env file
+ * To get your free Groq API key:
+ * 1. Visit https://console.groq.com
+ * 2. Sign up for a free account
+ * 3. Go to API Keys section
+ * 4. Create a new API key
+ * 5. Copy and paste it in your .env file
  */
 
 const express = require('express');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const OpenAI = require('openai');
 require('dotenv').config();
 
 const app = express();
@@ -22,10 +23,14 @@ app.use(express.json());
 // Your official email - change this if needed
 const OFFICIAL_EMAIL = 'ritesh1428.be23@chitkarauniversity.edu.in';
 
-// Initialize Gemini AI (only if API key is available)
-let genAI = null;
-if (process.env.GEMINI_API_KEY) {
-  genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Initialize Groq client using OpenAI SDK format
+// Groq is compatible with OpenAI's API format
+let groqClient = null;
+if (process.env.GROQ_API_KEY) {
+  groqClient = new OpenAI({
+    apiKey: process.env.GROQ_API_KEY,
+    baseURL: 'https://api.groq.com/openai/v1'
+  });
 }
 
 /**
@@ -221,26 +226,35 @@ app.post('/bfhl', async (req, res) => {
           });
         }
         
-        // Check if Gemini API is configured
-        if (!genAI) {
+        // Check if Groq API is configured
+        if (!groqClient) {
           return res.status(500).json({
             is_success: false,
             official_email: OFFICIAL_EMAIL,
-            error: 'Gemini API key not configured. Please add GEMINI_API_KEY to your .env file'
+            error: 'Groq API key not configured. Please add GROQ_API_KEY to your .env file'
           });
         }
         
         try {
-          // Get the generative model
-          const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+          // Call Groq API using OpenAI SDK format
+          const response = await groqClient.chat.completions.create({
+            model: 'llama-3.3-70b-versatile',  // Fast and capable model on Groq
+            messages: [
+              {
+                role: 'system',
+                content: 'You are a helpful assistant. Answer in exactly one word only.'
+              },
+              {
+                role: 'user',
+                content: value
+              }
+            ],
+            max_tokens: 10,
+            temperature: 0
+          });
           
-          // Ask the question with instruction for single-word response
-          const prompt = `Answer this question in exactly one word: ${value}`;
-          const result = await model.generateContent(prompt);
-          const response = await result.response;
-          let answer = response.text().trim();
-          
-          // Extract just the first word if multiple words are returned
+          // Extract the answer and get just the first word
+          let answer = response.choices[0].message.content.trim();
           answer = answer.split(/\s+/)[0];
           
           return res.status(200).json({
@@ -249,7 +263,7 @@ app.post('/bfhl', async (req, res) => {
             data: answer
           });
         } catch (aiError) {
-          console.error('Gemini API error:', aiError);
+          console.error('Groq API error:', aiError);
           return res.status(500).json({
             is_success: false,
             official_email: OFFICIAL_EMAIL,
