@@ -1,4 +1,4 @@
-# Qualifier REST API
+# REST API
 
 
 
@@ -7,15 +7,6 @@
 A production-ready REST API implementing mathematical operations and AI-powered queries. Built as part of the qualifier assignment with robust error handling and deployed on Render.
 
 **Tech Stack:** Node.js • Express.js • Groq AI
-
----
-
-## 🔗 Links
-
-- **GitHub Repository:** [https://github.com/cybergeek-007/qualifier-api](https://github.com/cybergeek-007/qualifier-api)
-- **Deployed API:**
-  - `/health` [https://qualifier-api-ds5a.onrender.com/health](https://qualifier-api-ds5a.onrender.com/health)
-  - `/bfhl` [https://qualifier-api-ds5a.onrender.com/bfhl](https://qualifier-api-ds5a.onrender.com/bfhl)
 
 ---
 
